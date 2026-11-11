@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BAZA MT</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="BAZA MT — персональный подбор каналов в Telegram и MAX: проверка, торг и безопасная сделка через гаранта.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: two-messenger desk — TG blue and MAX violet meet in one gradient; asset card is the hero object */
+:root{
+  --bg:#F3F6FA; --surface:#FFFFFF; --surface-2:#EAF1F8; --fg:#0E1621; --muted:#5B6B7C; --line:#D9E3EE;
+  --tg:#2AABEE; --tg-deep:#1E8FD0; --max-blue:#2F4DF0; --max-violet:#8A3FE0;
+  --grad:linear-gradient(120deg,#2AABEE 0%,#2F6BF2 45%,#6A3FE6 75%,#8A3FE0 100%);
+  --on-grad:#FFFFFF; --good:#1A9E5C; --chip:#E3EEF9; --chip-fg:#145E8C; --shadow:0 18px 40px -22px rgba(14,22,33,.35);
+  --display:"Unbounded","Manrope","Segoe UI",system-ui,sans-serif;
+  --body:"Manrope","Segoe UI",system-ui,-apple-system,sans-serif;
+  --r:18px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1621; --surface:#17212B; --surface-2:#1E2C3A; --fg:#E9EEF4; --muted:#8FA3B7; --line:#26384A;
+  --chip:#1C3346; --chip-fg:#8CCBF2; --good:#3CCB7F; --shadow:0 18px 40px -22px rgba(0,0,0,.8); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1621; --surface:#17212B; --surface-2:#1E2C3A; --fg:#E9EEF4; --muted:#8FA3B7; --line:#26384A;
+  --chip:#1C3346; --chip-fg:#8CCBF2; --good:#3CCB7F; --shadow:0 18px 40px -22px rgba(0,0,0,.8); color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55;margin:0}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);line-height:1.12;text-wrap:balance;margin:0}
+h2{font-size:clamp(26px,3.6vw,38px);font-weight:700;letter-spacing:-.01em}
+.eyebrow{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--tg-deep)}
+:root[data-theme="dark"] .eyebrow{color:var(--tg)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .eyebrow{color:var(--tg)}}
+.lead{color:var(--muted);font-size:18px;max-width:60ch}
+.btn{display:inline-flex;align-items:center;gap:10px;border:0;border-radius:14px;padding:15px 22px;font:700 16px/1 var(--body);text-decoration:none;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}
+.btn:focus-visible,.opt:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--tg);outline-offset:2px}
+.btn-main{background:var(--grad);color:var(--on-grad);box-shadow:0 12px 28px -12px rgba(47,77,240,.6)}
+.btn-main:hover{transform:translateY(-2px)}
+.btn-ghost{background:var(--surface);color:var(--fg);border:1px solid var(--line)}
+.btn-ghost:hover{border-color:var(--tg)}
+/* header */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-weight:800;font-size:19px;letter-spacing:.02em}
+.mark{width:34px;height:34px;border-radius:11px;background:var(--grad);display:grid;place-items:center;color:#fff;font:800 13px/1 var(--display);letter-spacing:.02em}
+.links{display:flex;gap:22px;font-weight:600;font-size:15px}
+.links a{text-decoration:none;color:var(--muted)}
+.links a:hover{color:var(--fg)}
+.nav .btn{padding:11px 16px;font-size:14px}
+@media (max-width:820px){.links{display:none}}
+/* hero */
+.hero{padding-block:56px 40px;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+.hero h1{font-size:clamp(34px,5.4vw,60px);font-weight:800;letter-spacing:-.02em;margin-block:14px 18px}
+.hero h1 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.platforms{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.pl{display:inline-flex;align-items:center;gap:8px;padding:7px 12px 7px 8px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-weight:700;font-size:14px}
+.pl img{width:22px;height:22px;border-radius:6px}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.trust{display:flex;gap:22px;flex-wrap:wrap;margin-top:30px;color:var(--muted);font-size:14px;font-weight:600}
+.trust b{display:block;color:var(--fg);font-family:var(--display);font-size:22px;font-weight:700}
+@media (max-width:900px){.hero{grid-template-columns:1fr;gap:34px;padding-block:36px 24px}}
+/* asset card */
+.asset{background:var(--surface);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);overflow:hidden;min-width:0}
+.asset-top{background:var(--grad);color:#fff;padding:18px 20px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.asset-top small{opacity:.85;font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.asset-top h3{font-size:18px;margin-top:4px;font-weight:700}
+.tag{background:rgba(255,255,255,.2);border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700;white-space:nowrap}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line)}
+.m{background:var(--surface);padding:14px 18px}
+.m span{display:block;color:var(--muted);font-size:12px;font-weight:600}
+.m b{font-family:var(--display);font-size:19px;font-weight:700;font-variant-numeric:tabular-nums}
+.asset-foot{padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.payback{display:flex;align-items:baseline;gap:8px}
+.payback b{font-family:var(--display);font-size:28px;color:var(--good)}
+.payback span{color:var(--muted);font-size:13px;font-weight:600}
+.note{font-size:12px;color:var(--muted)}
+/* sections */
+section{padding-block:56px}
+.sec-head{display:grid;gap:12px;margin-bottom:30px;max-width:720px}
+.why{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.why div{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;min-width:0}
+.why h3{font-size:17px;font-weight:700;margin-bottom:8px}
+.why p{margin:0;color:var(--muted);font-size:15px}
+.ico{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--chip);color:var(--chip-fg);margin-bottom:14px}
+.ico svg{width:22px;height:22px}
+@media (max-width:980px){.why{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.why{grid-template-columns:1fr}}
+/* pricing */
+.prices{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.price{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.price.hot{border:2px solid transparent;background:linear-gradient(var(--surface),var(--surface)) padding-box,var(--grad) border-box}
+.price .who{font-size:13px;color:var(--muted);font-weight:600}
+.price h3{font-size:19px;font-weight:700}
+.price .cost{font-family:var(--display);font-size:24px;font-weight:700;line-height:1.2}
+.price .cost small{display:block;font-family:var(--body);font-size:13px;color:var(--muted);font-weight:600;margin-top:4px}
+.price ul{margin:0;padding-left:18px;color:var(--muted);font-size:15px;display:grid;gap:4px}
+.price .btn{margin-top:auto;justify-content:center}
+.badge{align-self:flex-start;background:var(--grad);color:#fff;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:5px 10px;border-radius:999px}
+@media (max-width:980px){.prices{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){.prices{grid-template-columns:1fr}}
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;counter-reset:s}
+.step{position:relative;padding:20px 18px;border-radius:var(--r);background:var(--surface-2);min-width:0}
+.step::before{counter-increment:s;content:counter(s);font-family:var(--display);font-weight:800;font-size:15px;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--grad);color:#fff;margin-bottom:12px}
+.step h3{font-size:16px;font-weight:700;margin-bottom:6px}
+.step p{margin:0;color:var(--muted);font-size:14px}
+@media (max-width:980px){.steps{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.steps{grid-template-columns:1fr}}
+/* quiz */
+.quiz-band{background:var(--grad);padding-block:56px}
+.quiz{max-width:760px;margin:0 auto;background:var(--surface);border-radius:26px;padding:clamp(20px,4vw,38px);box-shadow:0 30px 60px -30px rgba(14,22,33,.55)}
+.q-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
+.q-top .eyebrow{margin:0}
+.q-count{font-weight:700;color:var(--muted);font-size:14px;font-variant-numeric:tabular-nums}
+.bar{height:6px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin-bottom:26px}
+.bar i{display:block;height:100%;width:0;background:var(--grad);transition:width .3s ease}
+.q h3{font-size:clamp(20px,2.6vw,26px);font-weight:700;margin-bottom:18px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:560px){.opts{grid-template-columns:1fr}}
+.opt{text-align:left;border:1.5px solid var(--line);background:var(--surface);color:var(--fg);border-radius:14px;padding:14px 16px;font:600 15px/1.35 var(--body);cursor:pointer;display:flex;gap:10px;align-items:center}
+.opt:hover{border-color:var(--tg)}
+.opt.on{border-color:var(--max-blue);background:var(--chip)}
+.opt small{display:block;color:var(--muted);font-weight:500;font-size:13px}
+.fields{display:grid;gap:12px}
+label{font-weight:700;font-size:14px;display:grid;gap:6px}
+input,textarea{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;font:500 16px var(--body);background:var(--bg);color:var(--fg)}
+textarea{min-height:84px;resize:vertical}
+.q-nav{display:flex;justify-content:space-between;gap:12px;margin-top:22px;flex-wrap:wrap}
+.err{color:#D93A3A;font-size:14px;font-weight:600;min-height:20px;margin-top:8px}
+.done{text-align:center;display:grid;gap:14px;justify-items:center}
+.done .big{width:64px;height:64px;border-radius:50%;background:var(--grad);display:grid;place-items:center;color:#fff}
+.done pre{white-space:pre-wrap;text-align:left;background:var(--surface-2);border-radius:14px;padding:14px 16px;font:500 14px/1.5 var(--body);margin:0;width:100%;max-width:520px}
+.small{font-size:13px;color:var(--muted)}
+/* faq */
+.faq{display:grid;gap:10px;max-width:820px}
+details{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 20px}
+summary{cursor:pointer;font-weight:700;font-size:17px;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::after{content:"+";font-family:var(--display);color:var(--tg-deep)}
+details[open] summary::after{content:"–"}
+details p{margin:10px 0 0;color:var(--muted)}
+/* footer */
+footer{border-top:1px solid var(--line);padding-block:30px 40px;color:var(--muted);font-size:14px}
+.foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+.foot nav{display:flex;gap:18px;flex-wrap:wrap}
+.foot a{text-decoration:none;font-weight:700;color:var(--fg)}
+</style>
+</head>
+<body>
+
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#top" aria-label="BAZA MT"><span class="mark">MT</span>BAZA MT</a>
+    <nav class="links" aria-label="Разделы">
+      <a href="#why">Почему мы</a><a href="#prices">Услуги и цены</a><a href="#how">Как работаем</a><a href="#faq">Вопросы</a>
+    </nav>
+    <a class="btn btn-main" href="#quiz">Подобрать канал</a>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <div>
+      <div class="platforms">
+        <span class="pl"><img src="data:image/png;base64,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" alt="">Telegram</span>
+        <span class="pl"><img src="data:image/png;base64,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" alt="">MAX</span>
+      </div>
+      <h1>Подберём канал, который <span class="g">приносит деньги</span></h1>
+      <p class="lead">Лично под ваш бюджет и цель: находим, проверяем аудиторию и охваты, торгуемся за цену и проводим сделку через гаранта. Вы получаете живой актив, а не накрученные цифры.</p>
+      <div class="cta-row">
+        <a class="btn btn-main" href="#quiz">Подобрать канал за 1 минуту
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn btn-ghost" href="https://t.me/SOVACH_TUT" target="_blank" rel="noopener">Написать в Telegram</a>
+      </div>
+      <div class="trust">
+        <div><b>8 лет</b>в Telegram</div>
+        <div><b>40 пунктов</b>проверки канала</div>
+        <div><b>от 200 тыс. ₽</b>бюджеты подбора</div>
+      </div>
+    </div>
+
+    <aside class="asset" aria-label="Пример карты актива">
+      <div class="asset-top">
+        <div><small>Карта актива · пример</small><h3>Бизнес-канал в MAX</h3></div>
+        <span class="tag">проверен ✓</span>
+      </div>
+      <div class="metrics">
+        <div class="m"><span>Подписчики</span><b>18 400</b></div>
+        <div class="m"><span>Средний охват</span><b>6 100 · 33%</b></div>
+        <div class="m"><span>CPM ниши</span><b>1 800 ₽</b></div>
+        <div class="m"><span>Рекламы в месяц</span><b>20 постов</b></div>
+        <div class="m"><span>Доход с рекламы</span><b>≈ 219 600 ₽</b></div>
+        <div class="m"><span>Цена после торга</span><b>2,1 млн ₽</b></div>
+      </div>
+      <div class="asset-foot">
+        <div class="payback"><b>≈ 10 мес.</b><span>окупаемость</span></div>
+        <span class="note">Расчёт: 6 100 ÷ 1000 × 1 800 ₽ × 20. Цифры — пример.</span>
+      </div>
+    </aside>
+  </div>
+
+  <section id="why">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Почему BAZA MT</span>
+        <h2>Работаем как ваш личный брокер, а не как биржа</h2>
+      </div>
+      <div class="why">
+        <div>
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></span>
+          <h3>Лично под вас</h3>
+          <p>Никаких витрин и готовых списков. Ищем варианты под вашу задачу, нишу и бюджет.</p>
+        </div>
+        <div>
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M8 11l2 2 4-4"/></svg></span>
+          <h3>Проверка по 40 пунктам</h3>
+          <p>Аудитория, охваты, график, источники роста, история рекламы. Отсеиваем накрутку до оплаты.</p>
+        </div>
+        <div>
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+          <h3>Торгуемся за вас</h3>
+          <p>Наша цель — снизить цену канала сильнее, чем стоит наша работа.</p>
+        </div>
+        <div>
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg></span>
+          <h3>Сделка через гаранта</h3>
+          <p>Деньги у гаранта, пока права на канал не перейдут к вам. Telegram и MAX.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="prices" style="padding-top:8px">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Услуги и цены</span>
+        <h2>Платите за результат, а не за обещания</h2>
+        <p class="lead">Работаем как самозанятые: договор-оферта и чек на каждую оплату.</p>
+      </div>
+      <div class="prices">
+        <article class="price hot">
+          <span class="badge">Главное</span>
+          <span class="who">Инвестор · бюджет от 200 тыс. ₽</span>
+          <h3>Подбор актива</h3>
+          <div class="cost">5% от сделки<small>минимум 10 000 ₽ предоплатой — засчитывается в итог</small></div>
+          <ul><li>3 проверенных варианта с расчётом окупаемости</li><li>Торг и переговоры с владельцем</li><li>Сделка через гаранта и передача прав</li></ul>
+          <a class="btn btn-main" href="#quiz">Подобрать канал</a>
+        </article>
+        <article class="price">
+          <span class="who">Бизнес · бюджет от 300 тыс. ₽</span>
+          <h3>Канал под ключ в MAX или Telegram</h3>
+          <div class="cost">от 90 000 ₽<small>+ 15% от рекламного бюджета</small></div>
+          <ul><li>Ниша, упаковка и контент-план</li><li>Закуп подписчиков в проверенных каналах</li><li>Отчёт по каждой ссылке</li></ul>
+          <a class="btn btn-ghost" href="#quiz">Обсудить запуск</a>
+        </article>
+        <article class="price">
+          <span class="who">Бизнес · от 50 тыс. ₽ в месяц</span>
+          <h3>Закуп рекламы</h3>
+          <div class="cost">от 10%<small>от рекламного бюджета</small></div>
+          <ul><li>Подбор и проверка площадок</li><li>Креативы и тесты</li><li>Масштаб только окупившихся каналов</li></ul>
+          <a class="btn btn-ghost" href="#quiz">Запустить закуп</a>
+        </article>
+        <article class="price">
+          <span class="who">Владелец канала</span>
+          <h3>Продажа канала</h3>
+          <div class="cost">3–10%<small>от суммы продажи</small></div>
+          <ul><li>Оценка и подготовка к продаже</li><li>Поиск покупателя</li><li>Безопасная сделка</li></ul>
+          <a class="btn btn-ghost" href="#quiz">Продать канал</a>
+        </article>
+        <article class="price">
+          <span class="who">Бюджет до 200 тыс. ₽</span>
+          <h3>Проверка или мини-подбор</h3>
+          <div class="cost">5 000 – 10 000 ₽<small>фиксированно</small></div>
+          <ul><li>Экспертиза канала перед покупкой</li><li>Риски, накрутка, реальная цена</li><li>Ответ в течение 1–2 дней</li></ul>
+          <a class="btn btn-ghost" href="#quiz">Проверить канал</a>
+        </article>
+        <article class="price">
+          <span class="who">Не знаете, с чего начать</span>
+          <h3>Бесплатный разбор</h3>
+          <div class="cost">0 ₽<small>15 минут, онлайн</small></div>
+          <ul><li>Подскажем, что реально купить на ваш бюджет</li><li>Telegram или MAX — что выгоднее под вашу цель</li></ul>
+          <a class="btn btn-ghost" href="#quiz">Записаться</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="how" style="padding-top:8px">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Как проходит подбор</span>
+        <h2>От заявки до канала на вашем аккаунте</h2>
+      </div>
+      <div class="steps">
+        <div class="step"><h3>Заявка</h3><p>Отвечаете на 5 вопросов о цели и бюджете.</p></div>
+        <div class="step"><h3>Созвон 15 минут</h3><p>Уточняем задачу, нишу и допустимый риск.</p></div>
+        <div class="step"><h3>Поиск и проверка</h3><p>Находим каналы и проверяем каждый по 40 пунктам.</p></div>
+        <div class="step"><h3>Карта актива</h3><p>3 варианта с охватами, доходом и окупаемостью.</p></div>
+        <div class="step"><h3>Торг и сделка</h3><p>Снижаем цену, проводим оплату через гаранта.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="quiz-band" id="quiz">
+    <div class="wrap">
+      <form class="quiz" id="quizForm" novalidate>
+        <div class="q-top"><span class="eyebrow">Подбор канала</span><span class="q-count" id="qCount">Шаг 1 из 6</span></div>
+        <div class="bar"><i id="qBar"></i></div>
+        <div id="qBody"></div>
+        <div class="err" id="qErr" role="alert"></div>
+        <div class="q-nav" id="qNav">
+          <button type="button" class="btn btn-ghost" id="qBack">Назад</button>
+          <button type="button" class="btn btn-main" id="qNext">Дальше</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <section id="faq">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Вопросы</span><h2>Частые вопросы</h2></div>
+      <div class="faq">
+        <details><summary>Вы гарантируете доход с канала?</summary><p>Нет. Канал — цифровой актив с рисками, как любой бизнес. Мы гарантируем честную проверку, расчёт окупаемости на реальных цифрах и безопасную сделку.</p></details>
+        <details><summary>Почему 5% от сделки, а не фиксированная цена?</summary><p>Так мы заинтересованы найти действительно хороший канал и выторговать цену. Минимальная предоплата 10 000 ₽ засчитывается в итоговую сумму.</p></details>
+        <details><summary>Telegram или MAX — что выбрать?</summary><p>Зависит от цели. MAX быстро растёт, в нём появилась официальная реклама в каналах. Telegram — зрелый рынок с понятной экономикой. На созвоне разберём, что выгоднее под ваш бюджет.</p></details>
+        <details><summary>Как защищены деньги?</summary><p>Оплата канала идёт через гаранта. Продавец получает деньги только после того, как права владельца перешли к вам и канал проверен.</p></details>
+        <details><summary>Что если мой бюджет меньше 200 тысяч?</summary><p>Подойдёт проверка канала или мини-подбор за 5 000–10 000 ₽. Также можно начать с бесплатного разбора.</p></details>
+        <details><summary>Как оформляется оплата?</summary><p>Работаем как самозанятые: принимаем оплату по договору-оферте и сразу выдаём чек.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div><b style="color:var(--fg)">BAZA MT</b> · подбор каналов в Telegram и MAX · Александр Совач, самозанятый</div>
+    <nav aria-label="Контакты">
+      <a href="https://t.me/BAZA_MT" target="_blank" rel="noopener">Канал @BAZA_MT</a>
+      <a href="https://t.me/SOVACH_TUT" target="_blank" rel="noopener">@SOVACH_TUT</a>
+      <a href="https://www.instagram.com/sovach.tg" target="_blank" rel="noopener">Instagram</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+/* Куда отправлять заявки: адрес прокладки Google Apps Script (токен бота хранится там, не на сайте). */
+const LEADS={endpoint:"", contact:"SOVACH_TUT"};
+const STEPS=[
+ {k:"service",q:"Что вам нужно?",o:[["Подобрать канал для покупки","инвестиция или бизнес"],["Канал под ключ","создать и вырастить"],["Закуп рекламы","привлечь подписчиков или клиентов"],["Продать канал","оценка и поиск покупателя"],["Проверить канал","перед покупкой"]]},
+ {k:"platform",q:"В каком мессенджере?",o:[["Telegram",""],["MAX",""],["Оба",""],["Пока не знаю","подскажем на созвоне"]]},
+ {k:"budget",q:"Какой бюджет готовы вложить?",o:[["До 200 000 ₽",""],["200 – 500 тыс. ₽",""],["500 тыс. – 1 млн ₽",""],["1 – 3 млн ₽",""],["Больше 3 млн ₽",""]]},
+ {k:"goal",q:"Какая главная цель?",o:[["Доход с рекламы","канал как актив"],["Клиенты для бизнеса","продажи через канал"],["Личный бренд",""],["Перепродажа","купить дешевле, продать дороже"]]},
+ {k:"time",q:"Когда планируете начать?",o:[["В ближайшую неделю",""],["В течение месяца",""],["Просто изучаю рынок",""]]},
+ {k:"contact",q:"Куда прислать варианты?",form:true}
+];
+const st={i:0,a:{}};
+const $=s=>document.getElementById(s);
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function render(){
+  const s=STEPS[st.i]; $("qErr").textContent="";
+  $("qCount").textContent="Шаг "+(st.i+1)+" из "+STEPS.length;
+  $("qBar").style.width=((st.i)/STEPS.length*100)+"%";
+  $("qBack").style.visibility=st.i?"visible":"hidden";
+  $("qNext").textContent=s.form?"Отправить заявку":"Дальше";
+  if(s.form){
+    $("qBody").innerHTML='<div class="q"><h3>'+s.q+'</h3><div class="fields">'+
+     '<label for="fName">Как к вам обращаться<input id="fName" autocomplete="name" placeholder="Имя"></label>'+
+     '<label for="fContact">Telegram или телефон<input id="fContact" placeholder="@username или +7…"></label>'+
+     '<label for="fNiche">Ниша или пожелания (необязательно)<textarea id="fNiche" placeholder="Например: бизнес, недвижимость, охват от 5 000"></textarea></label>'+
+     '</div><p class="small">Нажимая «Отправить заявку», вы соглашаетесь на обработку контактов для связи по заявке.</p></div>';
+    ["fName","fContact","fNiche"].forEach(id=>{const v=st.a[id]; if(v) $(id).value=v; $(id).addEventListener("input",e=>st.a[id]=e.target.value)});
+  } else {
+    $("qBody").innerHTML='<div class="q"><h3>'+s.q+'</h3><div class="opts">'+s.o.map((o,j)=>'<button type="button" class="opt'+(st.a[s.k]===o[0]?" on":"")+'" data-v="'+esc(o[0])+'">'+'<span>'+esc(o[0])+(o[1]?'<small>'+esc(o[1])+'</small>':'')+'</span></button>').join("")+'</div></div>';
+    $("qBody").querySelectorAll(".opt").forEach(b=>b.addEventListener("click",()=>{st.a[s.k]=b.dataset.v; if(st.i<STEPS.length-1){st.i++;render()}}));
+  }
+}
+function hot(){return st.a.budget && st.a.budget!=="До 200 000 ₽"}
+function message(){
+  const a=st.a;
+  return (hot()?"🔥 ГОРЯЧАЯ ЗАЯВКА":"🟦 Заявка (малый бюджет)")+" · BAZA MT\n\n"+
+  "Услуга: "+a.service+"\nМессенджер: "+a.platform+"\nБюджет: "+a.budget+"\nЦель: "+a.goal+"\nСроки: "+a.time+
+  "\n\nИмя: "+(a.fName||"—")+"\nКонтакт: "+(a.fContact||"—")+"\nНиша/пожелания: "+(a.fNiche||"—")+
+  "\n\nИсточник: "+(new URLSearchParams(location.search).get("src")||"сайт");
+}
+async function send(text){
+  if(!LEADS.endpoint) return false;
+  try{await fetch(LEADS.endpoint,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({text})}); return true}catch(e){return false}
+}
+async function finish(){
+  const text=message(); const ok=await send(text);
+  const link="https://t.me/"+LEADS.contact+"?text="+encodeURIComponent(text);
+  $("qBar").style.width="100%"; $("qCount").textContent="Готово"; $("qNav").hidden=true;
+  $("qBody").innerHTML='<div class="done"><div class="big"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg></div>'+
+   '<h3>'+(ok?"Заявка принята":"Осталось отправить заявку")+'</h3>'+
+   '<p class="lead" style="margin:0">'+(ok?(hot()?"Александр свяжется с вами в течение 15 минут в рабочее время.":"Мы пришлём варианты и бесплатный гайд «Как купить канал и не потерять деньги»."):"Нажмите кнопку — откроется Telegram с уже готовым текстом заявки.")+'</p>'+
+   '<pre>'+esc(text)+'</pre>'+
+   '<a class="btn btn-main" href="'+link+'" target="_blank" rel="noopener">'+(ok?"Написать Александру":"Отправить в Telegram")+'</a>'+
+   '<span class="small">Контакт для связи: @'+LEADS.contact+'</span></div>';
+}
+$("qNext").addEventListener("click",()=>{
+  const s=STEPS[st.i];
+  if(s.form){ if(!(st.a.fContact||"").trim()){ $("qErr").textContent="Укажите Telegram или телефон, чтобы мы могли прислать варианты."; return } finish(); return }
+  if(!st.a[s.k]){ $("qErr").textContent="Выберите один из вариантов."; return }
+  st.i++; render();
+});
+$("qBack").addEventListener("click",()=>{ if(st.i>0){st.i--;render()} });
+$("quizForm").addEventListener("submit",e=>e.preventDefault());
+render();
+</script>
+
+</body>
+</html>
