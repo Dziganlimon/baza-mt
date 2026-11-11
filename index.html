@@ -151,6 +151,38 @@ section+section::before{content:"";position:absolute;top:0;left:50%;width:min(88
 .ico svg{width:22px;height:22px}
 @media (max-width:1020px){.why{grid-template-columns:1fr 1fr}}
 @media (max-width:560px){.why{grid-template-columns:1fr}}
+/* market */
+.mk-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:980px){.mk-grid{grid-template-columns:1fr}}
+.plat{padding:26px;display:grid;gap:20px;align-content:start}
+.plat-h{display:flex;align-items:center;gap:12px}
+.plat-h img{width:42px;height:42px;border-radius:13px}
+.plat-h h3{font-size:20px}
+.plat-h small{display:block;color:var(--dim);font-size:12px;font-weight:700;letter-spacing:.04em}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kpi{padding:16px;border-radius:16px;background:var(--grad-soft);border:1px solid var(--line-2);min-width:0}
+.kpi b{display:block;font-family:var(--display);font-size:clamp(22px,2.4vw,28px);font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.kpi span{display:block;color:var(--muted);font-size:13px;font-weight:600;margin-top:6px;line-height:1.35}
+.kpi.w{grid-column:1/-1}
+.tier{font-size:11.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#8FD3F7;margin:4px 0 -8px}
+.chs{display:grid;gap:8px}
+.ch{display:grid;grid-template-columns:1fr auto auto;gap:14px;align-items:center;padding:12px 16px;border-radius:14px;background:var(--glass);border:1px solid var(--line)}
+.ch div{min-width:0}
+.ch b{display:block;font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ch small{color:var(--dim);font-size:12px;font-weight:600}
+.ch .n{text-align:right;font-family:var(--display);font-weight:500;font-size:15px;white-space:nowrap}
+.ch .n small{display:block;font-family:var(--body);font-size:11px}
+.ch .er{min-width:56px;text-align:center;font-weight:800;font-size:13px;padding:5px 8px;border-radius:999px;background:rgba(61,220,151,.1);color:var(--good)}
+.ch .er.lo{background:rgba(245,184,75,.12);color:var(--warn)}
+.ch.nr{grid-template-columns:1fr auto}
+@media (max-width:520px){.ch{grid-template-columns:1fr auto;gap:10px}.ch .er{grid-column:2;grid-row:1}.ch .n{grid-column:1/-1;text-align:left;display:flex;gap:8px;align-items:baseline}.ch .n small{display:inline}}
+.insights{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+@media (max-width:980px){.insights{grid-template-columns:1fr}}
+.ins{padding:22px 24px;display:flex;gap:16px;align-items:flex-start}
+.ins .ico{margin:0;flex:none}
+.ins h3{font-size:16px;margin-bottom:6px}
+.ins p{margin:0;color:var(--muted);font-size:14.5px}
+.src{font-size:12px;color:var(--dim);margin:18px 0 0}
 /* CPM / niches */
 .cpm-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:20px;align-items:start}
 @media (max-width:980px){.cpm-grid{grid-template-columns:1fr}}
@@ -326,7 +358,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding-bloc
   <div class="wrap nav">
     <a class="logo" href="#top" aria-label="BAZA MT"><span class="mark">MT</span>BAZA MT</a>
     <nav class="links" aria-label="Разделы">
-      <a href="#why">Почему мы</a><a href="#cpm">Тематики</a><a href="#prices">Услуги</a><a href="#how">Как работаем</a><a href="#cases">Отзывы</a><a href="#faq">Вопросы</a>
+      <a href="#market">Рынок</a><a href="#cpm">Тематики</a><a href="#why">Почему мы</a><a href="#prices">Услуги</a><a href="#how">Как работаем</a><a href="#cases">Отзывы</a><a href="#faq">Вопросы</a>
     </nav>
     <a class="btn btn-main" href="#quiz">Подобрать канал</a>
   </div>
@@ -402,34 +434,62 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding-bloc
 
   <div class="marquee" aria-hidden="true"><div class="track" id="mq"></div></div>
 
-  <section id="why">
+  <section id="market">
     <div class="wrap">
       <div class="sec-head rv">
-        <span class="eyebrow">Почему BAZA MT</span>
-        <h2>Работаем как ваш <span class="g">личный брокер</span>, а не как биржа</h2>
+        <span class="eyebrow">Масштаб рынка</span>
+        <h2>Каналы, которые <span class="g">соперничают с федеральными СМИ</span></h2>
+        <p class="lead">Канал — это собственная аудитория, ежедневный охват и рекламный инвентарь. Поэтому два канала с одинаковым числом подписчиков могут стоить в разы по-разному: решают охват и ниша.</p>
       </div>
-      <div class="why">
-        <div class="glass rv">
-          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></span>
-          <h3>Лично под вас</h3>
-          <p>Никаких витрин и готовых списков. Ищем варианты под вашу задачу, нишу и бюджет.</p>
+      <div class="mk-grid">
+        <div class="glass plat rv">
+          <div class="plat-h"><img src="tg.png" alt=""><div><h3>Telegram</h3><small>зрелый рынок с понятной экономикой</small></div></div>
+          <div class="kpis">
+            <div class="kpi"><b>75,7 млн</b><span>человек в месяц в России</span></div>
+            <div class="kpi"><b>≈ 28 млрд ₽</b><span>прогноз рынка посевов в каналах на 2026 год</span></div>
+          </div>
+          <p class="tier">Крупные каналы</p>
+          <div class="chs">
+            <div class="ch"><div><b>Топор Live</b><small>Новости</small></div><span class="n">4,1 млн<small>охват 518 тыс.</small></span><span class="er">13%</span></div>
+            <div class="ch"><div><b>Mash</b><small>Новости</small></div><span class="n">3,1 млн<small>охват 430 тыс.</small></span><span class="er">14%</span></div>
+            <div class="ch"><div><b>Первый Московский</b><small>Новости</small></div><span class="n">3,4 млн<small>охват 79 тыс.</small></span><span class="er lo">2%</span></div>
+          </div>
+          <p class="tier">Средние каналы</p>
+          <div class="chs">
+            <div class="ch"><div><b>Банкста</b><small>Экономика</small></div><span class="n">440 тыс.<small>охват 71 тыс.</small></span><span class="er">16%</span></div>
+            <div class="ch"><div><b>Навигатор спокойствия</b><small>Психология</small></div><span class="n">272 тыс.<small>охват 127 тыс.</small></span><span class="er">47%</span></div>
+          </div>
         </div>
-        <div class="glass rv" style="--dl:.08s">
-          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M8 11l2 2 4-4"/></svg></span>
-          <h3>Проверка по 40 пунктам</h3>
-          <p>Аудитория, охваты, график, источники роста, история рекламы. Отсеиваем накрутку до оплаты.</p>
-        </div>
-        <div class="glass rv" style="--dl:.16s">
-          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
-          <h3>Торгуемся за вас</h3>
-          <p>Наша цель — снизить цену канала сильнее, чем стоит наша работа.</p>
-        </div>
-        <div class="glass rv" style="--dl:.24s">
-          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg></span>
-          <h3>Сделка через гаранта</h3>
-          <p>Деньги у гаранта, пока права на канал не перейдут к вам. Telegram и MAX.</p>
+        <div class="glass plat rv" style="--dl:.1s">
+          <div class="plat-h"><img src="max.png" alt=""><div><h3>MAX</h3><small>быстрый рост и официальная реклама</small></div></div>
+          <div class="kpis">
+            <div class="kpi"><b>86,2 млн</b><span>человек в месяц — №1 среди мессенджеров</span></div>
+            <div class="kpi"><b>140 млн</b><span>регистраций с момента запуска</span></div>
+            <div class="kpi w"><b>10 млн+ каналов</b><span>и 430 млн подписок на них — рынок только формируется, хорошие каналы ещё можно взять дешевле</span></div>
+          </div>
+          <p class="tier">Крупные каналы</p>
+          <div class="chs">
+            <div class="ch nr"><div><b>MAX • Анонсы</b><small>Официальный канал</small></div><span class="n">3,56 млн<small>подписчиков</small></span></div>
+            <div class="ch nr"><div><b>РИА Новости</b><small>Новости</small></div><span class="n">1,23 млн<small>подписчиков</small></span></div>
+            <div class="ch nr"><div><b>Mash</b><small>Новости</small></div><span class="n">1,01 млн<small>подписчиков</small></span></div>
+          </div>
+          <p class="tier">Средние каналы</p>
+          <div class="chs">
+            <div class="ch nr"><div><b>Аэрофлот</b><small>Бизнес</small></div><span class="n">547 тыс.<small>подписчиков</small></span></div>
+          </div>
         </div>
       </div>
+      <div class="insights">
+        <div class="glass ins rv">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/></svg></span>
+          <div><h3>Подписчики ≠ охват</h3><p>У «Первого Московского» 3,4 млн подписчиков, но пост видят около 79 тыс. — 2%. У «Топор Live» 4,1 млн и 518 тыс. просмотров — 13%. Цену канала определяет охват, поэтому мы проверяем его в первую очередь.</p></div>
+        </div>
+        <div class="glass ins rv" style="--dl:.1s">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16M12 4l8 8-8 8"/></svg></span>
+          <div><h3>Медиа уже на двух площадках</h3><p>Mash — 3,1 млн подписчиков в Telegram и 1 млн в MAX. Крупные игроки строят аудиторию сразу в обоих мессенджерах — и вы можете сделать так же.</p></div>
+        </div>
+      </div>
+      <p class="src">Публичные данные: TGStat (ноябрь 2026), MaxBook (срез 31.07.2026), Mediascope (июнь 2026), VK, АРИР и Telega.in. ER — доля подписчиков, которые видят пост. Примеры показывают масштаб рынка и не являются проектами BAZA MT. Цифры меняются.</p>
     </div>
   </section>
 
@@ -457,6 +517,37 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding-bloc
           <div class="tabs" role="tablist" id="tabs"></div>
           <div class="chips" id="chips"></div>
           <p class="hint">Нажмите на тематику — CPM подставится в калькулятор. Цены — ориентир по внутреннему рынку Telegram, фактическая стоимость зависит от качества аудитории, формата и сезона.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="why">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="eyebrow">Почему BAZA MT</span>
+        <h2>Работаем как ваш <span class="g">личный брокер</span>, а не как биржа</h2>
+      </div>
+      <div class="why">
+        <div class="glass rv">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></span>
+          <h3>Лично под вас</h3>
+          <p>Никаких витрин и готовых списков. Ищем варианты под вашу задачу, нишу и бюджет.</p>
+        </div>
+        <div class="glass rv" style="--dl:.08s">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M8 11l2 2 4-4"/></svg></span>
+          <h3>Проверка по 40 пунктам</h3>
+          <p>Аудитория, охваты, график, источники роста, история рекламы. Отсеиваем накрутку до оплаты.</p>
+        </div>
+        <div class="glass rv" style="--dl:.16s">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+          <h3>Торгуемся за вас</h3>
+          <p>Наша цель — снизить цену канала сильнее, чем стоит наша работа.</p>
+        </div>
+        <div class="glass rv" style="--dl:.24s">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg></span>
+          <h3>Сделка через гаранта</h3>
+          <p>Деньги у гаранта, пока права на канал не перейдут к вам. Telegram и MAX.</p>
         </div>
       </div>
     </div>
