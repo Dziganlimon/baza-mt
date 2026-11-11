@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>if(/tgWebApp/.test(location.hash+location.search))document.write('<script src="https://telegram.org/js/telegram-web-app.js"><\/script>')</script>
 <title>BAZA MT</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="BAZA MT — персональный подбор каналов в Telegram и MAX: проверка, торг и безопасная сделка через гаранта.">
@@ -320,6 +321,9 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding-bloc
 .foot nav{display:flex;gap:20px;flex-wrap:wrap}
 .foot a{text-decoration:none;font-weight:700;color:var(--fg);transition:color .2s}
 .foot a:hover{color:#9FDCFB}
+/* Telegram Mini App */
+.tg header .nav .btn{display:none}
+.tg .hero{padding-top:24px}
 /* reveal */
 .js .rv{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .7s var(--ease);transition-delay:var(--dl,0s)}
 .js .rv.in{opacity:1;transform:none}
@@ -735,6 +739,17 @@ const LEADS={endpoint:"", contact:"SOVACH_TUT"};
 const REVIEWS_URL="";
 if(REVIEWS_URL) document.getElementById("reviewsBtn").href=REVIEWS_URL;
 
+/* ---------- Telegram Mini App ---------- */
+const TG=(window.Telegram&&Telegram.WebApp&&Telegram.WebApp.initData)?Telegram.WebApp:null;
+const TGU=TG&&TG.initDataUnsafe&&TG.initDataUnsafe.user||null;
+if(TG){
+  document.documentElement.classList.add("tg");
+  try{TG.ready();TG.expand();TG.setHeaderColor("#060A13");TG.setBackgroundColor("#060A13");if(TG.disableVerticalSwipes)TG.disableVerticalSwipes()}catch(e){}
+  /* ссылки t.me открываем внутри Telegram */
+  document.addEventListener("click",e=>{const a=e.target.closest&&e.target.closest('a[href^="https://t.me/"]'); if(!a)return; e.preventDefault(); TG.openTelegramLink(a.href)});
+}
+function haptic(t){try{TG&&TG.HapticFeedback&&TG.HapticFeedback.notificationOccurred(t)}catch(e){}}
+
 /* ---------- тематики и CPM ---------- */
 const TIERS=[
  {t:"CPM до 400 ₽",s:"бюджетные ниши",n:[["18+","100–150"],["Аниме","250–400"],["Игры и приложения","250–400"],["Кино","250–400"],["Маникюр","250–400"],["Мемы","250–350"],["Музыка","150–250"],["Сохранённые материалы","150–250"],["Детские текстовые каналы","150–300"],["Темы для Telegram","100–300"],["Юмор","300–400"]]},
@@ -793,6 +808,7 @@ const STEPS=[
  {k:"contact",q:"Куда прислать варианты?",form:true}
 ];
 const st={i:0,a:{}};
+if(TGU){st.a.fName=[TGU.first_name,TGU.last_name].filter(Boolean).join(" "); if(TGU.username) st.a.fContact="@"+TGU.username}
 const $=s=>document.getElementById(s);
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
 function render(){
@@ -804,7 +820,7 @@ function render(){
   if(s.form){
     $("qBody").innerHTML='<div class="q"><h3>'+s.q+'</h3><div class="fields">'+
      '<label for="fName">Как к вам обращаться<input id="fName" autocomplete="name" placeholder="Имя"></label>'+
-     '<label for="fContact">Telegram или телефон<input id="fContact" placeholder="@username или +7…"></label>'+
+     '<label for="fContact">'+(TGU?'Telegram или телефон (необязательно — ваш Telegram мы уже видим)':'Telegram или телефон')+'<input id="fContact" placeholder="@username или +7…"></label>'+
      '<label for="fNiche">Ниша или пожелания (необязательно)<textarea id="fNiche" placeholder="Например: бизнес, недвижимость, охват от 5 000"></textarea></label>'+
      '</div><p class="small">Нажимая «Отправить заявку», вы соглашаетесь на обработку контактов для связи по заявке.</p></div>';
     ["fName","fContact","fNiche"].forEach(id=>{const v=st.a[id]; if(v) $(id).value=v; $(id).addEventListener("input",e=>st.a[id]=e.target.value)});
@@ -819,29 +835,30 @@ function message(){
   return (hot()?"🔥 ГОРЯЧАЯ ЗАЯВКА":"🟦 Заявка (малый бюджет)")+" · BAZA MT\n\n"+
   "Услуга: "+a.service+"\nМессенджер: "+a.platform+"\nБюджет: "+a.budget+"\nЦель: "+a.goal+"\nСроки: "+a.time+
   "\n\nИмя: "+(a.fName||"—")+"\nКонтакт: "+(a.fContact||"—")+"\nНиша/пожелания: "+(a.fNiche||"—")+
-  "\n\nИсточник: "+(new URLSearchParams(location.search).get("src")||"сайт");
+  "\n\nИсточник: "+(TG?"Mini App в Telegram":(new URLSearchParams(location.search).get("src")||"сайт"));
 }
 async function send(text){
   if(!LEADS.endpoint) return false;
-  try{await fetch(LEADS.endpoint,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({text})}); return true}catch(e){return false}
+  try{await fetch(LEADS.endpoint,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({text,initData:TG?TG.initData:""})}); return true}catch(e){return false}
 }
 async function finish(){
   const text=message();
   const link="https://t.me/"+LEADS.contact+"?text="+encodeURIComponent(text);
   /* Пока без бота: сразу открываем личку @SOVACH_TUT с готовым текстом заявки */
-  if(!LEADS.endpoint){ try{window.open(link,"_blank","noopener")}catch(e){} }
+  if(!LEADS.endpoint){ try{ if(TG) TG.openTelegramLink(link); else window.open(link,"_blank","noopener") }catch(e){} }
   const ok=await send(text);
+  haptic(ok?"success":"warning");
   $("qBar").style.width="100%"; $("qCount").textContent="Готово"; $("qNav").hidden=true;
   $("qBody").innerHTML='<div class="done q"><div class="big"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg></div>'+
    '<h3>'+(ok?"Заявка принята":"Последний шаг — нажмите «Отправить» в Telegram")+'</h3>'+
-   '<p class="lead" style="margin:0">'+(ok?(hot()?"Александр свяжется с вами в течение 15 минут в рабочее время.":"Мы пришлём варианты и бесплатный гайд «Как купить канал и не потерять деньги»."):"Мы открыли чат с Александром, текст заявки уже вставлен. Если Telegram не открылся — нажмите кнопку ниже.")+'</p>'+
+   '<p class="lead" style="margin:0">'+(ok?(TG?"Подтверждение уже пришло в чат с ботом. ":"")+(hot()?"Александр свяжется с вами в течение 15 минут в рабочее время.":"Мы пришлём варианты и бесплатный гайд «Как купить канал и не потерять деньги»."):"Мы открыли чат с Александром, текст заявки уже вставлен. Если Telegram не открылся — нажмите кнопку ниже.")+'</p>'+
    '<pre>'+esc(text)+'</pre>'+
    '<a class="btn btn-main" href="'+link+'" target="_blank" rel="noopener">'+(ok?"Написать Александру":"Отправить в Telegram")+'</a>'+
    '<span class="small">Контакт для связи: @'+LEADS.contact+'</span></div>';
 }
 $("qNext").addEventListener("click",()=>{
   const s=STEPS[st.i];
-  if(s.form){ if(!(st.a.fContact||"").trim()){ $("qErr").textContent="Укажите Telegram или телефон, чтобы мы могли прислать варианты."; return } finish(); return }
+  if(s.form){ if(!TGU&&!(st.a.fContact||"").trim()){ $("qErr").textContent="Укажите Telegram или телефон, чтобы мы могли прислать варианты."; return } finish(); return }
   if(!st.a[s.k]){ $("qErr").textContent="Выберите один из вариантов."; return }
   st.i++; render();
 });
