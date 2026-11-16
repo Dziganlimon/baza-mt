@@ -780,7 +780,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding-bloc
 <script>
 document.documentElement.classList.add("js");
 /* Куда отправлять заявки: адрес прокладки Google Apps Script (токен бота хранится там, не на сайте). */
-const LEADS={endpoint:"", contact:"SOVACH_TUT"};
+const LEADS={endpoint:"https://baza-mt-bot.sovach23.workers.dev/site-lead", contact:"SOVACH_TUT"};
 /* Ссылка на отзывы — вставить, когда будет готова */
 const REVIEWS_URL="";
 if(REVIEWS_URL) document.getElementById("reviewsBtn").href=REVIEWS_URL;
@@ -858,6 +858,7 @@ function render(){
     $("qBody").innerHTML='<div class="q"><h3>'+s.q+'</h3><div class="fields">'+
      '<label for="fName">Как к вам обращаться<input id="fName" autocomplete="name" placeholder="Имя"></label>'+
      '<label for="fContact">Telegram или телефон<input id="fContact" placeholder="@username или +7…"></label>'+
+     '<input type="text" id="qhp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">'+
      '<label for="fNiche">Ниша или пожелания (необязательно)<textarea id="fNiche" placeholder="Например: бизнес, недвижимость, охват от 5 000"></textarea></label>'+
      '</div>'+CONSENT_HTML+'</div>';
     ["fName","fContact","fNiche"].forEach(id=>{const v=st.a[id]; if(v) $(id).value=v; $(id).addEventListener("input",e=>st.a[id]=e.target.value)});
@@ -879,9 +880,13 @@ function message(){
 /* цели Яндекс Метрики: quiz_start — начал квиз, lead — отправил заявку */
 function goal(n,p){try{window.ym&&ym(114214537,"reachGoal",n,p)}catch(e){}}
 function md(t){return esc(t).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>")}
+const T0=Date.now();
 async function send(text){
   if(!LEADS.endpoint) return false;
-  try{await fetch(LEADS.endpoint,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({text})}); return true}catch(e){return false}
+  try{
+    const r=await fetch(LEADS.endpoint,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text,contact:(st.a.fContact||"").trim(),hp:(($("qhp")||{}).value||""),t:Date.now()-T0,page:new URLSearchParams(location.search).get("src")||"главная",hot:!!hot()})});
+    if(!r.ok) return false; const j=await r.json(); return !!j.ok;
+  }catch(e){return false}
 }
 async function finish(){
   const text=message();
@@ -893,7 +898,7 @@ async function finish(){
   $("qBar").style.width="100%"; $("qCount").textContent="Готово"; $("qNav").hidden=true;
   $("qBody").innerHTML='<div class="done q"><div class="big"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg></div>'+
    '<h3>'+(ok?"Заявка принята":"Последний шаг — нажмите «Отправить» в Telegram")+'</h3>'+
-   '<p class="lead" style="margin:0">'+(ok?(hot()?"Александр свяжется с вами в течение 15 минут в рабочее время.":"Мы подберём варианты под ваш бюджет и свяжемся с вами."):"Мы открыли чат с Александром, текст заявки уже вставлен. Если Telegram не открылся — нажмите кнопку ниже.")+'</p>'+
+   '<p class="lead" style="margin:0">'+(ok?(hot()?"Александр свяжется с вами в течение 15 минут в рабочее время.":"Мы подберём варианты под ваш бюджет и свяжемся с вами."):"Текст заявки уже готов — нажмите кнопку ниже и «Отправить» в Telegram.")+'</p>'+
    '<pre>'+md(text)+'</pre>'+
    '<a class="btn btn-main" href="'+link+'" target="_blank" rel="noopener">'+(ok?"Написать Александру":"Отправить в Telegram")+'</a>'+
    '<span class="small">Контакт для связи: @'+LEADS.contact+'</span></div>';

@@ -146,7 +146,7 @@ footer h4{margin:0 0 8px;color:var(--fg);font:700 14px/1.3 var(--body)}footer a{
 <div class="sticky-cta"><a class="btn btn-main" href="#quiz">Подобрать канал</a></div>
 <script>
 (function(){
-var SRC="reklama",PRE="Закуп рекламы",CONTACT="SOVACH_TUT";
+var SRC="reklama",PRE="Закуп рекламы",CONTACT="SOVACH_TUT",EP="https://baza-mt-bot.sovach23.workers.dev/site-lead",T0=Date.now();
 var S=[{k:"service",q:"Что вам нужно?",o:["Подобрать канал для покупки","Проверить канал","Канал под ключ","Закуп рекламы","Продать канал"]},
 {k:"budget",q:"Какой бюджет?",o:["До 100 000 ₽","100 – 150 тыс. ₽","150 – 500 тыс. ₽","500 тыс. – 1 млн ₽","Больше 1 млн ₽"]},
 {k:"time",q:"Когда планируете начать?",o:["В ближайшие дни","В течение месяца","Просто изучаю рынок"]},
@@ -157,7 +157,7 @@ function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;
 function goal(n,p){try{window.ym&&ym(114214537,"reachGoal",n,p)}catch(e){}}
 function r(){var s=S[st.i];$("qerr").textContent="";$("qc").textContent="Шаг "+(st.i+1)+" из "+S.length;$("qb").style.width=(st.i/S.length*100)+"%";
 $("qback").style.visibility=st.i?"visible":"hidden";$("qnext").hidden=!s.form;
-if(s.form){$("qbody").innerHTML='<h3>'+s.q+'</h3><label>Как к вам обращаться<input type="text" id="fn" autocomplete="name" placeholder="Имя"></label><label>Telegram или телефон<input type="text" id="fc" placeholder="@username или +7…"></label><label class="agree"><input type="checkbox" id="fa"><span>Я даю <a href="/consent.html" target="_blank" rel="noopener">согласие на обработку персональных данных</a> и ознакомлен(а) с <a href="/policy.html" target="_blank" rel="noopener">политикой конфиденциальности</a></span></label>';
+if(s.form){$("qbody").innerHTML='<h3>'+s.q+'</h3><label>Как к вам обращаться<input type="text" id="fn" autocomplete="name" placeholder="Имя"></label><label>Telegram или телефон<input type="text" id="fc" placeholder="@username или +7…"></label><input type="text" id="qhp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0"><label class="agree"><input type="checkbox" id="fa"><span>Я даю <a href="/consent.html" target="_blank" rel="noopener">согласие на обработку персональных данных</a> и ознакомлен(а) с <a href="/policy.html" target="_blank" rel="noopener">политикой конфиденциальности</a></span></label>';
 ["fn","fc"].forEach(function(id){if(st.a[id])$(id).value=st.a[id];$(id).addEventListener("input",function(e){st.a[id]=e.target.value})});$("fa").checked=!!st.a.ag;$("fa").addEventListener("change",function(e){st.a.ag=e.target.checked})}
 else{$("qbody").innerHTML='<h3>'+s.q+'</h3><div class="opts">'+s.o.map(function(o){return '<button type="button" class="opt'+(st.a[s.k]===o?" on":"")+'" data-v="'+esc(o)+'">'+esc(o)+'</button>'}).join("")+'</div>';
 [].forEach.call($("qbody").querySelectorAll(".opt"),function(b){b.addEventListener("click",function(){if(!started){started=1;goal("quiz_start",{page:SRC})}st.a[s.k]=b.dataset.v;b.classList.add("on");setTimeout(function(){st.i++;r()},160)})})}}
@@ -166,10 +166,15 @@ $("qback").onclick=function(){if(st.i){st.i--;r()}};
 $("qnext").onclick=function(){var a=st.a;if(!(a.fc||"").trim()){$("qerr").textContent="Укажите Telegram или телефон";return}if(!a.ag){$("qerr").textContent="Нужно согласие на обработку данных";return}
 var B=function(x){return"**"+x+"**"};
 var t="Здравствуйте! Меня интересует:\n\n"+B("Услуга:")+" "+a.service+"\n"+B("Бюджет:")+" "+a.budget+"\n"+B("Сроки:")+" "+a.time+"\n\n"+B("Имя:")+" "+((a.fn||"").trim()||"—")+"\n"+B("Контакт:")+" "+a.fc.trim()+"\n\nПишу с сайта BAZA MT ("+SRC+")";
-var link="https://t.me/"+CONTACT+"?text="+encodeURIComponent(t);try{window.open(link,"_blank","noopener")}catch(e){}
-goal("lead",{budget:a.budget,service:a.service,hot:hot(),page:SRC});
+var link="https://t.me/"+CONTACT+"?text="+encodeURIComponent(t);
+$("qnext").disabled=true;$("qnext").textContent="Отправляем…";
+fetch(EP,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text:t,contact:a.fc.trim(),hp:($("qhp")||{}).value||"",t:Date.now()-T0,page:SRC,hot:!!hot()})})
+.then(function(r){return r.ok?r.json():{ok:false}}).catch(function(){return{ok:false}}).then(function(res){
+goal("lead",{budget:a.budget,service:a.service,hot:hot(),page:SRC,auto:!!res.ok});
 $("qb").style.width="100%";$("qc").textContent="Готово";$("qnav").hidden=true;
-$("qbody").innerHTML='<h3>Последний шаг — нажмите «Отправить» в Telegram</h3><p style="color:var(--muted)">Мы открыли чат с Александром, текст заявки уже вставлен. Если Telegram не открылся — нажмите кнопку ниже.</p><pre>'+esc(t).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>")+'</pre><a class="btn btn-main" href="'+link+'" target="_blank" rel="noopener">Отправить в Telegram</a>'};
+var pre='<pre>'+esc(t).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>")+'</pre>';
+if(res.ok){$("qbody").innerHTML='<h3>✅ Заявка принята</h3><p style="color:var(--muted)">'+(hot()?"Александр свяжется с вами в течение 15 минут в рабочее время.":"Подберём варианты под ваш бюджет и свяжемся с вами.")+' Хотите быстрее — напишите сами.</p>'+pre+'<a class="btn btn-ghost" href="'+link+'" target="_blank" rel="noopener">Написать Александру в Telegram</a>'}
+else{$("qbody").innerHTML='<h3>Последний шаг — отправьте заявку в Telegram</h3><p style="color:var(--muted)">Текст заявки уже готов — нажмите кнопку и «Отправить».</p>'+pre+'<a class="btn btn-main" href="'+link+'" target="_blank" rel="noopener">Отправить в Telegram</a>'}})};
 if(PRE){st.a.service=PRE;st.i=1}
 r();
 })();
