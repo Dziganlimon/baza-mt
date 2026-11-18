@@ -7,6 +7,15 @@
 <script type="text/javascript">(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js','ym');ym(114214537,'init',{webvisor:true,clickmap:true,accurateTrackBounce:true,trackLinks:true});</script>
 <noscript><div><img src="https://mc.yandex.ru/watch/114214537" style="position:absolute; left:-9999px;" alt=""></div></noscript>
 <!-- /Yandex.Metrika counter -->
+<!-- ПАРТНЁРКА: запоминает ?ref=код (первое касание, 90 дней) и дописывает «Партнёр: код» во все заявки на /site-lead. Подключается make_pages.py и build.py в <head> -->
+<script>
+(function(){var K="bmt_ref",D=90*864e5;
+function get(){try{var x=JSON.parse(localStorage.getItem(K)||"null");return x&&Date.now()-x.t<D?x:null}catch(e){return null}}
+try{var q=new URLSearchParams(location.search).get("ref");if(q&&/^[A-Za-z0-9_]{2,32}$/.test(q)&&!get()){localStorage.setItem(K,JSON.stringify({r:q.toLowerCase(),t:Date.now()}))}}catch(e){}
+var F=window.fetch;if(!F)return;
+window.fetch=function(u,o){try{var x=get();if(x&&String(u).indexOf("/site-lead")>-1&&o&&typeof o.body==="string"){var d=JSON.parse(o.body);if(d.text&&d.text.indexOf("Партнёр:")<0){d.text+="\n\n🤝 **Партнёр:** "+x.r;d.page=(d.page||"")+" · ref "+x.r;o.body=JSON.stringify(d)}}}catch(e){}return F.apply(this,arguments)};
+})();
+</script>
 <title>Купить Telegram-канал и канал в MAX — подбор под ключ | BAZA MT</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Подбор и покупка Telegram-каналов и каналов в MAX: проверка на накрутку, расчёт окупаемости, торг и безопасная сделка через гаранта. 200+ каналов под ключ, 8 лет на рынке. Подбор за 1 сутки.">
@@ -770,7 +779,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding-bloc
     </nav>
   </div>
   <div class="wrap seo-links">
-    <nav aria-label="Услуги"><b>Услуги</b><a href="/kupit-telegram-kanal">Купить Telegram-канал</a><a href="/kupit-kanal-max">Купить канал в MAX</a><a href="/podbor-kanala">Подбор канала</a><a href="/proverka-kanala">Проверка канала</a><a href="/prodat-telegram-kanal">Продать канал</a><a href="/reklama-v-telegram">Реклама в Telegram</a><a href="/kanal-pod-klyuch">Канал под ключ</a></nav>
+    <nav aria-label="Услуги"><b>Услуги</b><a href="/kupit-telegram-kanal">Купить Telegram-канал</a><a href="/kupit-kanal-max">Купить канал в MAX</a><a href="/podbor-kanala">Подбор канала</a><a href="/proverka-kanala">Проверка канала</a><a href="/prodat-telegram-kanal">Продать канал</a><a href="/reklama-v-telegram">Реклама в Telegram</a><a href="/kanal-pod-klyuch">Канал под ключ</a><a href="/partneram">Партнёрская программа 20%</a></nav>
     <nav aria-label="Статьи"><b>Статьи</b><a href="/skolko-stoit-telegram-kanal">Сколько стоит канал</a><a href="/kak-proverit-kanal-na-nakrutku">Проверка на накрутку</a><a href="/okupaemost-telegram-kanala">Окупаемость канала</a><a href="/max-ili-telegram">MAX или Telegram</a><a href="/cpm-telegram">CPM по тематикам</a><a href="/bezopasnaya-sdelka-kanal">Безопасная сделка</a><a href="/birzha-ili-broker">Биржа или брокер</a><a href="/stati">Все статьи</a></nav>
   </div>
   <style>.seo-links{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding-block:18px 26px;border-top:1px solid var(--line);font-size:13.5px}.seo-links nav{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline}.seo-links b{color:var(--fg);width:100%;font-size:14px}.seo-links a{color:var(--muted);text-decoration:none}.seo-links a:hover{color:var(--fg)}@media(max-width:700px){.seo-links{grid-template-columns:1fr}}</style>
