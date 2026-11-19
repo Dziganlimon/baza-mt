@@ -11,13 +11,21 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <meta name="theme-color" content="#060A13">
-<!-- ПАРТНЁРКА: запоминает ?ref=код (первое касание, 90 дней) и дописывает «Партнёр: код» во все заявки на /site-lead. Подключается make_pages.py и build.py в <head> -->
+<!-- ПАРТНЁРКА + ИСТОЧНИК: запоминает ?ref=код (первое касание, 90 дней) и utm_source/utm_campaign или внешний реферер (первое касание, 30 дней); дописывает «Партнёр: код» и «Источник: threads / kirill» во все заявки на /site-lead. Подключается make_pages.py и build.py в <head> -->
 <script>
-(function(){var K="bmt_ref",D=90*864e5;
+(function(){var K="bmt_ref",D=90*864e5,KS="bmt_src",DS=30*864e5;
 function get(){try{var x=JSON.parse(localStorage.getItem(K)||"null");return x&&Date.now()-x.t<D?x:null}catch(e){return null}}
-try{var q=new URLSearchParams(location.search).get("ref");if(q&&/^[A-Za-z0-9_]{2,32}$/.test(q)&&!get()){localStorage.setItem(K,JSON.stringify({r:q.toLowerCase(),t:Date.now()}))}}catch(e){}
+function gs(){try{var x=JSON.parse(localStorage.getItem(KS)||"null");return x&&Date.now()-x.t<DS?x:null}catch(e){return null}}
+function cl(v){return String(v||"").replace(/[^\wа-яё.\-]/gi,"").slice(0,40)}
+try{var p=new URLSearchParams(location.search),q=p.get("ref");if(q&&/^[A-Za-z0-9_]{2,32}$/.test(q)&&!get()){localStorage.setItem(K,JSON.stringify({r:q.toLowerCase(),t:Date.now()}))}
+var us=cl(p.get("utm_source")),uc=cl(p.get("utm_campaign"));
+if(us){localStorage.setItem(KS,JSON.stringify({s:(us+(uc?" / "+uc:"")).toLowerCase(),t:Date.now()}))}
+else if(!gs()&&document.referrer){var h=new URL(document.referrer).hostname.replace(/^www\./,"");if(h&&!/bazamt\.ru$/.test(h))localStorage.setItem(KS,JSON.stringify({s:h,t:Date.now()}))}}catch(e){}
 var F=window.fetch;if(!F)return;
-window.fetch=function(u,o){try{var x=get();if(x&&String(u).indexOf("/site-lead")>-1&&o&&typeof o.body==="string"){var d=JSON.parse(o.body);if(d.text&&d.text.indexOf("Партнёр:")<0){d.text+="\n\n🤝 **Партнёр:** "+x.r;d.page=(d.page||"")+" · ref "+x.r;o.body=JSON.stringify(d)}}}catch(e){}return F.apply(this,arguments)};
+window.fetch=function(u,o){try{if(String(u).indexOf("/site-lead")>-1&&o&&typeof o.body==="string"){var d=JSON.parse(o.body),ch=0,x=get(),s=gs();
+if(x&&d.text&&d.text.indexOf("Партнёр:")<0){d.text+="\n\n🤝 **Партнёр:** "+x.r;d.page=(d.page||"")+" · ref "+x.r;ch=1}
+if(s&&d.text&&d.text.indexOf("Источник:")<0){d.text+="\n📍 **Источник:** "+s.s;d.page=(d.page||"")+" · "+s.s;ch=1}
+if(ch)o.body=JSON.stringify(d)}}catch(e){}return F.apply(this,arguments)};
 })();
 </script>
 
@@ -26,7 +34,7 @@ window.fetch=function(u,o){try{var x=get();if(x&&String(u).indexOf("/site-lead")
 <meta property="og:type" content="article"><meta property="og:site_name" content="BAZA MT"><meta property="og:locale" content="ru_RU">
 <meta property="og:url" content="https://bazamt.ru/oshibki-pri-pokupke-kanala"><meta property="og:title" content="7 ошибок при покупке Telegram-канала, из-за которых теряют деньги"><meta property="og:description" content="Типичные ошибки покупателей Telegram- и MAX-каналов: оценка по подписчикам, оплата без гаранта, нет проверки накрутки, переплата, неверная ниша.">
 <meta property="og:image" content="https://bazamt.ru/og.jpg"><meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "BAZA MT", "item": "https://bazamt.ru/"}, {"@type": "ListItem", "position": 2, "name": "Статьи", "item": "https://bazamt.ru/stati"}, {"@type": "ListItem", "position": 3, "name": "7 ошибок при покупке канала", "item": "https://bazamt.ru/oshibki-pri-pokupke-kanala"}]}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Какая ошибка самая дорогая?", "acceptedAnswer": {"@type": "Answer", "text": "Оплата напрямую без гаранта и без передачи прав владельца — можно потерять и деньги, и канал."}}]}, {"@type": "Article", "headline": "7 ошибок при покупке Telegram-канала, из-за которых теряют деньги", "description": "Типичные ошибки покупателей Telegram- и MAX-каналов: оценка по подписчикам, оплата без гаранта, нет проверки накрутки, переплата, неверная ниша.", "url": "https://bazamt.ru/oshibki-pri-pokupke-kanala", "inLanguage": "ru", "datePublished": "2026-11-16", "dateModified": "2026-11-18", "image": "https://bazamt.ru/og.jpg", "author": {"@type": "Organization", "name": "BAZA MT", "url": "https://bazamt.ru/"}, "publisher": {"@type": "Organization", "name": "BAZA MT", "logo": {"@type": "ImageObject", "url": "https://bazamt.ru/icon-512.png"}}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "BAZA MT", "item": "https://bazamt.ru/"}, {"@type": "ListItem", "position": 2, "name": "Статьи", "item": "https://bazamt.ru/stati"}, {"@type": "ListItem", "position": 3, "name": "7 ошибок при покупке канала", "item": "https://bazamt.ru/oshibki-pri-pokupke-kanala"}]}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Какая ошибка самая дорогая?", "acceptedAnswer": {"@type": "Answer", "text": "Оплата напрямую без гаранта и без передачи прав владельца — можно потерять и деньги, и канал."}}]}, {"@type": "Article", "headline": "7 ошибок при покупке Telegram-канала, из-за которых теряют деньги", "description": "Типичные ошибки покупателей Telegram- и MAX-каналов: оценка по подписчикам, оплата без гаранта, нет проверки накрутки, переплата, неверная ниша.", "url": "https://bazamt.ru/oshibki-pri-pokupke-kanala", "inLanguage": "ru", "datePublished": "2026-11-16", "dateModified": "2026-11-19", "image": "https://bazamt.ru/og.jpg", "author": {"@type": "Organization", "name": "BAZA MT", "url": "https://bazamt.ru/"}, "publisher": {"@type": "Organization", "name": "BAZA MT", "logo": {"@type": "ImageObject", "url": "https://bazamt.ru/icon-512.png"}}}]}</script>
 <!-- Yandex.Metrika counter 114214537 -->
 <script type="text/javascript">(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js','ym');ym(114214537,'init',{webvisor:true,clickmap:true,accurateTrackBounce:true,trackLinks:true});</script>
 <noscript><div><img src="https://mc.yandex.ru/watch/114214537" style="position:absolute; left:-9999px;" alt=""></div></noscript>
