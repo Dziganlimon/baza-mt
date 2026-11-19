@@ -11,13 +11,21 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <meta name="theme-color" content="#060A13">
-<!-- ПАРТНЁРКА: запоминает ?ref=код (первое касание, 90 дней) и дописывает «Партнёр: код» во все заявки на /site-lead. Подключается make_pages.py и build.py в <head> -->
+<!-- ПАРТНЁРКА + ИСТОЧНИК: запоминает ?ref=код (первое касание, 90 дней) и utm_source/utm_campaign или внешний реферер (первое касание, 30 дней); дописывает «Партнёр: код» и «Источник: threads / kirill» во все заявки на /site-lead. Подключается make_pages.py и build.py в <head> -->
 <script>
-(function(){var K="bmt_ref",D=90*864e5;
+(function(){var K="bmt_ref",D=90*864e5,KS="bmt_src",DS=30*864e5;
 function get(){try{var x=JSON.parse(localStorage.getItem(K)||"null");return x&&Date.now()-x.t<D?x:null}catch(e){return null}}
-try{var q=new URLSearchParams(location.search).get("ref");if(q&&/^[A-Za-z0-9_]{2,32}$/.test(q)&&!get()){localStorage.setItem(K,JSON.stringify({r:q.toLowerCase(),t:Date.now()}))}}catch(e){}
+function gs(){try{var x=JSON.parse(localStorage.getItem(KS)||"null");return x&&Date.now()-x.t<DS?x:null}catch(e){return null}}
+function cl(v){return String(v||"").replace(/[^\wа-яё.\-]/gi,"").slice(0,40)}
+try{var p=new URLSearchParams(location.search),q=p.get("ref");if(q&&/^[A-Za-z0-9_]{2,32}$/.test(q)&&!get()){localStorage.setItem(K,JSON.stringify({r:q.toLowerCase(),t:Date.now()}))}
+var us=cl(p.get("utm_source")),uc=cl(p.get("utm_campaign"));
+if(us){localStorage.setItem(KS,JSON.stringify({s:(us+(uc?" / "+uc:"")).toLowerCase(),t:Date.now()}))}
+else if(!gs()&&document.referrer){var h=new URL(document.referrer).hostname.replace(/^www\./,"");if(h&&!/bazamt\.ru$/.test(h))localStorage.setItem(KS,JSON.stringify({s:h,t:Date.now()}))}}catch(e){}
 var F=window.fetch;if(!F)return;
-window.fetch=function(u,o){try{var x=get();if(x&&String(u).indexOf("/site-lead")>-1&&o&&typeof o.body==="string"){var d=JSON.parse(o.body);if(d.text&&d.text.indexOf("Партнёр:")<0){d.text+="\n\n🤝 **Партнёр:** "+x.r;d.page=(d.page||"")+" · ref "+x.r;o.body=JSON.stringify(d)}}}catch(e){}return F.apply(this,arguments)};
+window.fetch=function(u,o){try{if(String(u).indexOf("/site-lead")>-1&&o&&typeof o.body==="string"){var d=JSON.parse(o.body),ch=0,x=get(),s=gs();
+if(x&&d.text&&d.text.indexOf("Партнёр:")<0){d.text+="\n\n🤝 **Партнёр:** "+x.r;d.page=(d.page||"")+" · ref "+x.r;ch=1}
+if(s&&d.text&&d.text.indexOf("Источник:")<0){d.text+="\n📍 **Источник:** "+s.s;d.page=(d.page||"")+" · "+s.s;ch=1}
+if(ch)o.body=JSON.stringify(d)}}catch(e){}return F.apply(this,arguments)};
 })();
 </script>
 
