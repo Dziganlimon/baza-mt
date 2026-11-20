@@ -45,7 +45,7 @@
 - Mini App подбора: https://app.bazamt.ru/
 - Telegram-канал: https://t.me/BAZA_MT
 - Бот: https://t.me/BAZAMTbot
-- Написать менеджеру: https://t.me/SOVACH_TUT
+- Написать менеджеру: https://t.me/MT_BAZA
 
 ## Важно
 Канал — цифровой актив с рисками. BAZA MT не гарантирует доходность; расчёты на сайте носят информационный характер.

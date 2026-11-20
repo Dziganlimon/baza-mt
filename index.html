@@ -47,7 +47,7 @@ if(ch)o.body=JSON.stringify(d)}}catch(e){}return F.apply(this,arguments)};
 <meta name="twitter:image" content="https://bazamt.ru/og.jpg">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
-{"@type":"ProfessionalService","@id":"https://bazamt.ru/#org","name":"BAZA MT","url":"https://bazamt.ru/","logo":"https://bazamt.ru/icon-512.png","image":"https://bazamt.ru/og.jpg","description":"Агентство по подбору, проверке и покупке каналов в Telegram и MAX: проверка на накрутку, расчёт окупаемости, торг и безопасная сделка через гаранта, каналы под ключ, закуп рекламы.","foundingDate":"2018","areaServed":"RU","priceRange":"от 5 000 ₽","sameAs":["https://t.me/BAZA_MT","https://t.me/BAZAMTbot"],"contactPoint":{"@type":"ContactPoint","contactType":"sales","url":"https://t.me/SOVACH_TUT","availableLanguage":"ru"},
+{"@type":"ProfessionalService","@id":"https://bazamt.ru/#org","name":"BAZA MT","url":"https://bazamt.ru/","logo":"https://bazamt.ru/icon-512.png","image":"https://bazamt.ru/og.jpg","description":"Агентство по подбору, проверке и покупке каналов в Telegram и MAX: проверка на накрутку, расчёт окупаемости, торг и безопасная сделка через гаранта, каналы под ключ, закуп рекламы.","foundingDate":"2018","areaServed":"RU","priceRange":"от 5 000 ₽","sameAs":["https://t.me/BAZA_MT","https://t.me/BAZAMTbot"],"contactPoint":{"@type":"ContactPoint","contactType":"sales","url":"https://t.me/MT_BAZA","availableLanguage":"ru"},
 "hasOfferCatalog":{"@type":"OfferCatalog","name":"Услуги","itemListElement":[
 {"@type":"Offer","itemOffered":{"@type":"Service","name":"Подбор и покупка Telegram-канала"}},
 {"@type":"Offer","itemOffered":{"@type":"Service","name":"Подбор и покупка канала в MAX"}},
@@ -440,7 +440,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding-bloc
       <div class="cta-row rv" style="--dl:.24s">
         <a class="btn btn-main" href="#quiz">Подобрать канал за 1 минуту
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-        <a class="btn btn-ghost" href="https://t.me/SOVACH_TUT" target="_blank" rel="noopener">Написать в Telegram</a>
+        <a class="btn btn-ghost" href="https://t.me/MT_BAZA" target="_blank" rel="noopener">Написать в Telegram</a>
       </div>
       <div class="trust rv" style="--dl:.32s">
         <div><b><span data-count="8">8</span> лет</b>в Telegram</div>
@@ -749,7 +749,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding-bloc
         <span class="sub">без публичных заявок</span>
         <p class="lead">Напишите, какой у вас бюджет и цель. Честно скажем, реально ли это, и предложим формат работы. Всё, что вы расскажете, остаётся между нами.</p>
         <div class="cta-row">
-          <a class="btn btn-main" href="https://t.me/SOVACH_TUT" target="_blank" rel="noopener">Написать нам
+          <a class="btn btn-main" href="https://t.me/MT_BAZA" target="_blank" rel="noopener">Написать нам
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           <a class="btn btn-ghost" href="https://t.me/BAZA_MT" target="_blank" rel="noopener">Перейти в канал</a>
         </div>
@@ -782,7 +782,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding-bloc
     <div><b style="color:var(--fg)">BAZA MT</b> · подбор каналов в Telegram и MAX<br><span class="small">© 2018–2026 BAZA MT</span></div>
     <nav aria-label="Контакты">
       <a href="https://t.me/BAZA_MT" target="_blank" rel="noopener">Канал BAZA MT</a>
-      <a href="https://t.me/SOVACH_TUT" target="_blank" rel="noopener">Обратная связь</a>
+      <a href="https://t.me/MT_BAZA" target="_blank" rel="noopener">Обратная связь</a>
       <a href="policy.html" target="_blank" rel="noopener">Политика конфиденциальности</a>
     </nav>
   </div>
@@ -797,7 +797,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding-bloc
 <script>
 document.documentElement.classList.add("js");
 /* Куда отправлять заявки: адрес прокладки Google Apps Script (токен бота хранится там, не на сайте). */
-const LEADS={endpoint:"https://baza-mt-bot.sovach23.workers.dev/site-lead", contact:"SOVACH_TUT"};
+const LEADS={endpoint:"https://baza-mt-bot.sovach23.workers.dev/site-lead", contact:"MT_BAZA"};
 /* Ссылка на отзывы — вставить, когда будет готова */
 const REVIEWS_URL="";
 if(REVIEWS_URL) document.getElementById("reviewsBtn").href=REVIEWS_URL;
@@ -908,7 +908,7 @@ async function send(text){
 async function finish(){
   const text=message();
   const link="https://t.me/"+LEADS.contact+"?text="+encodeURIComponent(text);
-  /* Пока без бота: сразу открываем личку @SOVACH_TUT с готовым текстом заявки */
+  /* Пока без бота: сразу открываем личку @MT_BAZA с готовым текстом заявки */
   if(!LEADS.endpoint){ try{window.open(link,"_blank","noopener")}catch(e){} }
   goal("lead",{budget:st.a.budget,service:st.a.service,hot:hot()});
   const ok=await send(text);
@@ -917,7 +917,7 @@ async function finish(){
    '<h3>'+(ok?"Заявка принята":"Последний шаг — нажмите «Отправить» в Telegram")+'</h3>'+
    '<p class="lead" style="margin:0">'+(ok?(hot()?"Александр свяжется с вами в течение 15 минут в рабочее время.":"Мы подберём варианты под ваш бюджет и свяжемся с вами."):"Текст заявки уже готов — нажмите кнопку ниже и «Отправить» в Telegram.")+'</p>'+
    '<pre>'+md(text)+'</pre>'+
-   '<a class="btn btn-main" href="'+link+'" target="_blank" rel="noopener">'+(ok?"Написать Александру":"Отправить в Telegram")+'</a>'+
+   '<a class="btn btn-main" href="'+link+'" target="_blank" rel="noopener">'+(ok?"Написать нам":"Отправить в Telegram")+'</a>'+
    '<span class="small">Контакт для связи: @'+LEADS.contact+'</span></div>';
 }
 $("qNext").addEventListener("click",()=>{
@@ -992,7 +992,7 @@ var t="🎯 **Бесплатный разбор (окно при уходе)**\n
 fetch(EP,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text:t,contact:ct,hp:$("xphp").value||"",t:Date.now()-T0,page:"разбор · "+SRC,hot:false})})
 .then(function(r){return r.ok?r.json():{ok:false}}).catch(function(){return{ok:false}}).then(function(res){
 goal("exit_razbor",{page:SRC,auto:!!res.ok});set(Date.now()+365*864e5);
-var link="https://t.me/SOVACH_TUT?text="+encodeURIComponent("Здравствуйте! Хочу бесплатный разбор 15 минут. Мой контакт: "+ct);
+var link="https://t.me/MT_BAZA?text="+encodeURIComponent("Здравствуйте! Хочу бесплатный разбор 15 минут. Мой контакт: "+ct);
 $("xpf").innerHTML=res.ok?'<p style="color:#3DDC97;font-weight:700">✅ Готово! Свяжемся с вами и договоримся о времени.</p><a class="go" style="display:block;text-align:center;text-decoration:none;box-sizing:border-box" href="'+link+'" target="_blank" rel="noopener">Написать сразу в Telegram</a>'
 :'<p>Последний шаг — отправьте сообщение в Telegram, текст уже готов:</p><a class="go" style="display:block;text-align:center;text-decoration:none;box-sizing:border-box" href="'+link+'" target="_blank" rel="noopener">Отправить в Telegram</a>';
 $("xpn").textContent="Закрыть"})};
